@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore Shop.slnx
+
+      - name: Build
+        run: dotnet build Shop.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --solution Shop.slnx --configuration Release --no-build
+
+      - name: Check for pending EF Core model changes
+        run: |
+          dotnet tool install --global dotnet-ef
+          dotnet ef migrations has-pending-model-changes \
+            --project IdentityService/src/IdentityService.Infrastructure \
+            --startup-project IdentityService/src/IdentityService.Api \
+            --configuration Release --no-build

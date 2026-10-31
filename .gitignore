@@ -55,3 +55,24 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+*.DotSettings.user
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Visual Studio (in case someone opens the solution there)
+.vs/
+*.user
+*.suo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets and local overrides
+**/keys/*.pem
+appsettings.*.local.json
+*.pfx

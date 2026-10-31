@@ -1,0 +1,25 @@
+<Solution>
+  <Folder Name="/Aspire/">
+    <Project Path="Aspire/Shop.AppHost/Shop.AppHost.csproj" />
+    <Project Path="Aspire/Shop.ServiceDefaults/Shop.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/IdentityService/" />
+  <Folder Name="/IdentityService/src/">
+    <Project Path="IdentityService/src/IdentityService.Api/IdentityService.Api.csproj" />
+    <Project Path="IdentityService/src/IdentityService.Application/IdentityService.Application.csproj" />
+    <Project Path="IdentityService/src/IdentityService.Contracts/IdentityService.Contracts.csproj" />
+    <Project Path="IdentityService/src/IdentityService.Domain/IdentityService.Domain.csproj" />
+    <Project Path="IdentityService/src/IdentityService.Infrastructure/IdentityService.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/IdentityService/tests/">
+    <Project Path="IdentityService/tests/IdentityService.IntegrationTests/IdentityService.IntegrationTests.csproj" />
+    <Project Path="IdentityService/tests/IdentityService.UnitTests/IdentityService.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".github/workflows/ci.yml" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+  </Folder>
+</Solution>

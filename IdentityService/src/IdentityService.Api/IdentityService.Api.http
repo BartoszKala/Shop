@@ -1,0 +1,178 @@
+### IdentityService - przykładowe żądania (Rider: HTTP Client)
+@baseUrl = https://localhost:7001
+
+### Rejestracja (link aktywacyjny trafia do Mailpit: http://localhost:8025)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "nowy@shop.local",
+  "password": "Haslo1234",
+  "firstName": "Anna",
+  "lastName": "Nowak",
+  "acceptTerms": true,
+  "marketingConsent": false
+}
+
+### Potwierdzenie e-maila (userId i code z linku w e-mailu)
+POST {{baseUrl}}/api/auth/confirm-email
+Content-Type: application/json
+
+{
+  "userId": "00000000-0000-0000-0000-000000000000",
+  "code": "..."
+}
+
+### Logowanie (konto z seeda)
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@shop.local",
+  "password": "User1234!"
+}
+
+> {%
+    if (response.body.tokens) {
+        client.global.set("accessToken", response.body.tokens.accessToken);
+        client.global.set("refreshToken", response.body.tokens.refreshToken);
+    }
+    if (response.body.twoFactorToken) {
+        client.global.set("twoFactorToken", response.body.twoFactorToken);
+    }
+%}
+
+### Logowanie - drugi krok (kod z aplikacji Authenticator)
+POST {{baseUrl}}/api/auth/login/2fa
+Content-Type: application/json
+
+{
+  "twoFactorToken": "{{twoFactorToken}}",
+  "code": "123456"
+}
+
+> {%
+    client.global.set("accessToken", response.body.tokens.accessToken);
+    client.global.set("refreshToken", response.body.tokens.refreshToken);
+%}
+
+### Odświeżenie tokenu
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+> {%
+    client.global.set("accessToken", response.body.accessToken);
+    client.global.set("refreshToken", response.body.refreshToken);
+%}
+
+### Profil
+GET {{baseUrl}}/api/account/me
+Authorization: Bearer {{accessToken}}
+
+### Zmiana hasła
+POST {{baseUrl}}/api/account/change-password
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "currentPassword": "User1234!",
+  "newPassword": "NoweHaslo123"
+}
+
+### Zmiana e-maila (link potwierdzający idzie na nowy adres)
+POST {{baseUrl}}/api/account/change-email
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "newEmail": "jan.nowy@shop.local",
+  "password": "User1234!"
+}
+
+### 2FA - status
+GET {{baseUrl}}/api/account/2fa
+Authorization: Bearer {{accessToken}}
+
+### 2FA - wygeneruj klucz i kod QR
+POST {{baseUrl}}/api/account/2fa/authenticator
+Authorization: Bearer {{accessToken}}
+
+### 2FA - włącz (kod z aplikacji), zwraca kody odzyskiwania
+POST {{baseUrl}}/api/account/2fa/enable
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "code": "123456"
+}
+
+### 2FA - wyłącz
+POST {{baseUrl}}/api/account/2fa/disable
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "password": "User1234!"
+}
+
+### Sesje (urządzenia)
+GET {{baseUrl}}/api/account/sessions
+Authorization: Bearer {{accessToken}}
+
+### Wyloguj wszystkie inne urządzenia
+DELETE {{baseUrl}}/api/account/sessions
+Authorization: Bearer {{accessToken}}
+
+### Historia zdarzeń bezpieczeństwa
+GET {{baseUrl}}/api/account/security-events?page=1&pageSize=20
+Authorization: Bearer {{accessToken}}
+
+### RODO - zgody
+GET {{baseUrl}}/api/account/privacy/consents
+Authorization: Bearer {{accessToken}}
+
+### RODO - zgoda marketingowa
+PUT {{baseUrl}}/api/account/privacy/consents/marketing
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "granted": true
+}
+
+### RODO - eksport danych
+GET {{baseUrl}}/api/account/privacy/export
+Authorization: Bearer {{accessToken}}
+
+### Admin - logowanie (konto z seeda)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@shop.local",
+  "password": "Admin123!"
+}
+
+> {%
+    client.global.set("adminToken", response.body.tokens.accessToken);
+%}
+
+### Admin - wyszukiwanie użytkowników
+GET {{baseUrl}}/api/admin/users?search=shop.local&page=1&pageSize=20
+Authorization: Bearer {{adminToken}}
+
+### Wylogowanie
+POST {{baseUrl}}/api/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Klucze publiczne (dla Shop API)
+GET {{baseUrl}}/.well-known/jwks.json
