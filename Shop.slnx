@@ -15,6 +15,17 @@
     <Project Path="IdentityService/tests/IdentityService.IntegrationTests/IdentityService.IntegrationTests.csproj" />
     <Project Path="IdentityService/tests/IdentityService.UnitTests/IdentityService.UnitTests.csproj" />
   </Folder>
+  <Folder Name="/ShopService/" />
+  <Folder Name="/ShopService/src/">
+    <Project Path="ShopService/src/ShopService.Api/ShopService.Api.csproj" />
+    <Project Path="ShopService/src/ShopService.Application/ShopService.Application.csproj" />
+    <Project Path="ShopService/src/ShopService.Contracts/ShopService.Contracts.csproj" />
+    <Project Path="ShopService/src/ShopService.Domain/ShopService.Domain.csproj" />
+    <Project Path="ShopService/src/ShopService.Infrastructure/ShopService.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/ShopService/tests/">
+    <Project Path="ShopService/tests/ShopService.UnitTests/ShopService.UnitTests.csproj" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".github/workflows/ci.yml" />

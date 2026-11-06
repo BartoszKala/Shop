@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ShopService.Api/ShopService.Api.csproj" />
+    <Project Path="src/ShopService.Application/ShopService.Application.csproj" />
+    <Project Path="src/ShopService.Contracts/ShopService.Contracts.csproj" />
+    <Project Path="src/ShopService.Domain/ShopService.Domain.csproj" />
+    <Project Path="src/ShopService.Infrastructure/ShopService.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ShopService.UnitTests/ShopService.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/Aspire/">
+    <Project Path="../Aspire/Shop.ServiceDefaults/Shop.ServiceDefaults.csproj" />
+  </Folder>
+</Solution>

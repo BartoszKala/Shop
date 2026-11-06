@@ -5,7 +5,7 @@ Aplikacja sklepu w architekturze mikroserwisów: .NET 10, Blazor Web App, Postgr
 | Część | Stan | Opis |
 |---|---|---|
 | [IdentityService](IdentityService/README.md) | gotowy | konta, logowanie, 2FA, role, JWT, RODO, panel admina użytkowników |
-| Shop API | do zrobienia | produkty, kategorie, koszyk, zamówienia |
+| [ShopService](ShopService/README.md) (Shop API) | wstępna wersja | katalog, wyszukiwanie, zamówienia, panel admina katalogu i zamówień |
 | Shop.Web (Blazor) | do zrobienia | sklep i panel administratora |
 
 ## Uruchomienie
@@ -33,6 +33,7 @@ Testy integracyjne uruchamiają PostgreSQL w kontenerze (Testcontainers), więc 
 ```
 Aspire/               Shop.AppHost (orkiestracja lokalna), Shop.ServiceDefaults (OpenTelemetry, health checks, resilience)
 IdentityService/      mikroserwis tożsamości (Clean Architecture)
+ShopService/          Shop API: produkty, kategorie, zamówienia (ten sam układ warstw)
 Directory.Build.props wspólne ustawienia: net10.0, nullable, ostrzeżenia = błędy, audyt pakietów NuGet
 Directory.Packages.props  wersje wszystkich pakietów w jednym miejscu (Central Package Management)
 global.json           wersja SDK i Microsoft.Testing.Platform dla `dotnet test`

@@ -1,0 +1,86 @@
+### ShopService - przykładowe żądania (Rider: HTTP Client)
+@identityUrl = https://localhost:7001
+@baseUrl = https://localhost:7002
+
+### Logowanie administratora w IdentityService (konto z seeda)
+POST {{identityUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@shop.local",
+  "password": "Admin123!"
+}
+
+> {%
+    client.global.set("accessToken", response.body.tokens.accessToken);
+%}
+
+### Kategorie
+GET {{baseUrl}}/api/categories
+
+### Produkty - wyszukiwanie w kategorii, od najtańszych
+GET {{baseUrl}}/api/products?categoryId=019a5a10-0000-7000-8000-000000000004&search=mata&sort=PriceAsc&page=1&pageSize=20
+
+### Szczegóły produktu
+GET {{baseUrl}}/api/products/019a5a10-0000-7000-9000-000000000010
+
+### Złożenie zamówienia (wyślij dwa razy – drugi raz 200 z tym samym zamówieniem dzięki Idempotency-Key)
+# @name placeOrder
+POST {{baseUrl}}/api/orders
+Idempotency-Key: 6f1c2a90-0000-4000-8000-000000000001
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    { "productId": "019a5a10-0000-7000-9000-000000000010", "quantity": 1 },
+    { "productId": "019a5a10-0000-7000-9000-000000000012", "quantity": 2 }
+  ],
+  "shippingAddress": {
+    "recipient": "Jan Kowalski",
+    "street": "Długa 1/2",
+    "postalCode": "00-001",
+    "city": "Warszawa",
+    "phone": "+48 600 000 000"
+  }
+}
+
+> {%
+    client.global.set("orderId", response.body.id);
+%}
+
+### Moje zamówienia
+GET {{baseUrl}}/api/orders
+Authorization: Bearer {{accessToken}}
+
+### Admin - nowa kategoria (slug powstanie z nazwy)
+POST {{baseUrl}}/api/admin/categories
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Zabawki",
+  "description": "Dla dzieci i dorosłych."
+}
+
+### Admin - nowy produkt
+POST {{baseUrl}}/api/admin/products
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "categoryId": "019a5a10-0000-7000-8000-000000000001",
+  "name": "Powerbank 20 000 mAh",
+  "description": "Dwa porty USB-C.",
+  "price": 149.99,
+  "stock": 30,
+  "isActive": true
+}
+
+### Admin - zamówienia ze statusem New
+GET {{baseUrl}}/api/admin/orders?status=New
+Authorization: Bearer {{accessToken}}
+
+### Admin - oznaczenie jako opłacone (dalej: /ship, /mark-delivered; /cancel zwraca towar do magazynu)
+POST {{baseUrl}}/api/admin/orders/{{orderId}}/mark-paid
+Authorization: Bearer {{accessToken}}

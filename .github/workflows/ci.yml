@@ -37,3 +37,7 @@ jobs:
             --project IdentityService/src/IdentityService.Infrastructure \
             --startup-project IdentityService/src/IdentityService.Api \
             --configuration Release --no-build
+          dotnet ef migrations has-pending-model-changes \
+            --project ShopService/src/ShopService.Infrastructure \
+            --startup-project ShopService/src/ShopService.Api \
+            --configuration Release --no-build

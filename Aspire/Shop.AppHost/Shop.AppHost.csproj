@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\IdentityService\src\IdentityService.Api\IdentityService.Api.csproj" />
+    <ProjectReference Include="..\..\ShopService\src\ShopService.Api\ShopService.Api.csproj" />
   </ItemGroup>
 
 </Project>
